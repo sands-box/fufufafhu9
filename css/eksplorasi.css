@@ -1,0 +1,215 @@
+.module-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.module-sidebar {
+  width: 320px;
+  background-color: var(--color-navy);
+  border-right: 1px solid rgba(254, 243, 199, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.module-sidebar-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(254, 243, 199, 0.1);
+}
+
+.module-title {
+  font-size: 1.5rem;
+  margin-top: 16px;
+  text-transform: capitalize;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 8px;
+}
+
+.nav-btn {
+  padding: 14px 20px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-warm-light);
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: rgba(56, 189, 248, 0.05);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.nav-btn.active {
+  background-color: rgba(56, 189, 248, 0.1);
+  border-color: var(--color-accent-blue);
+  color: var(--color-accent-blue);
+}
+
+.module-content-area {
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+  background-color: var(--color-navy-deep);
+}
+
+.eksplorasi-layout {
+  display: flex;
+  height: 100%;
+  padding: 24px;
+  gap: 24px;
+}
+
+.canvas-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-navy);
+  border-radius: 12px;
+  border: 1px solid rgba(254, 243, 199, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.canvas-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(254, 243, 199, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.canvas-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.panel-section {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.control-panel, .table-panel {
+  background-color: var(--color-navy);
+  border-radius: 12px;
+  border: 1px solid rgba(254, 243, 199, 0.1);
+  padding: 20px;
+}
+
+.control-group {
+  margin-bottom: 16px;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-accent-blue);
+  font-size: 0.9rem;
+}
+
+.control-input, .control-select, .control-slider {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color-navy-deep);
+  border: 1px solid rgba(254, 243, 199, 0.2);
+  color: var(--color-warm-light);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+}
+
+.coord-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.coord-table th {
+  color: var(--color-accent-amber);
+  text-align: center;
+  padding: 8px;
+  border-bottom: 1px solid rgba(254, 243, 199, 0.2);
+}
+
+.coord-table td {
+  text-align: center;
+  padding: 8px;
+  border-bottom: 1px solid rgba(254, 243, 199, 0.05);
+}
+
+.temuan-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.temuan-card {
+  background-color: var(--color-navy);
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid rgba(254, 243, 199, 0.1);
+  margin-bottom: 24px;
+}
+
+.temuan-input {
+  width: 100%;
+  min-height: 100px;
+  background-color: var(--color-navy-deep);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--color-warm-light);
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-family: 'Inter', sans-serif;
+  resize: vertical;
+}
+
+.temuan-input:focus {
+  outline: none;
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.mode-toggle {
+  background-color: var(--color-navy-deep);
+  border: 1px solid var(--color-accent-blue);
+  border-radius: 20px;
+  padding: 4px;
+  display: flex;
+}
+
+.mode-btn {
+  padding: 6px 16px;
+  border: none;
+  background: transparent;
+  color: var(--color-warm-light);
+  border-radius: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.mode-btn.active {
+  background-color: var(--color-accent-blue);
+  color: var(--color-navy-deep);
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> </title>
+    
+    <!-- Google Fonts: Poppins (Heading) & Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/narasi.css">
+    <link rel="stylesheet" href="css/eksplorasi.css">
+</head>
+<body>
+    <!-- Main Application Container -->
+    <div id="app"></div>
+
+    <!-- 3rd Party Libraries: Offline copy with CDN fallback -->
+    <script src="lib/three.core.min.js"></script>
+    <script src="lib/jspdf.umd.min.js"></script>
+    <script>
+        if (!window.THREE) {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"><\/script>');
+        }
+        if (!window.jspdf) {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"><\/script>');
+        }
+    </script>
+
+    <!-- Application Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/narasi.js"></script>
+    <script src="js/form.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/materi.js"></script>
+    <script src="js/canvas2d.js"></script>
+    <script src="js/canvas3d.js"></script>
+    <script src="js/temuan.js"></script>
+    <script src="js/assessment.js"></script>
+    <script src="js/certificate.js"></script>
+</body>
+</html>
