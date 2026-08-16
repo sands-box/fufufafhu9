@@ -11,22 +11,22 @@ window.TL.Assessment = {
         this.score = 0;
         this.userAnswers = [];
         
-        fetch('./assets/data/soal.json')
-            .then(res => res.json())
-            .then(data => {
-                this.questions = data;
-                this.renderQuestion(target);
-            })
-            .catch(err => {
-                target.innerHTML = `
-                    <div class="flex-center" style="background-color: var(--color-navy-deep);">
-                        <div style="background-color: var(--color-navy); padding: 40px; border-radius: 12px; max-width: 600px; text-align: center; border: 1px solid var(--color-accent-amber);">
-                            <h2 style="color: var(--color-accent-amber); margin-bottom: 16px;">Gagal Memuat Soal</h2>
-                            <p style="color: var(--color-warm-light); font-size: 1.1rem; line-height: 1.6;">Browser memblokir pembacaan file lokal (soal.json). Jalankan melalui Local Web Server (seperti Live Server VS Code) agar soal dapat dimuat.</p>
-                        </div>
+        const data = window.TL.SOAL_DATA;
+
+        if (!data || !data.length) {
+            target.innerHTML = `
+                <div class="flex-center" style="background-color: var(--color-navy-deep);">
+                    <div style="background-color: var(--color-navy); padding: 40px; border-radius: 12px; max-width: 600px; text-align: center; border: 1px solid var(--color-accent-amber);">
+                        <h2 style="color: var(--color-accent-amber); margin-bottom: 16px;">Gagal Memuat Soal</h2>
+                        <p style="color: var(--color-warm-light); font-size: 1.1rem; line-height: 1.6;">Data soal (js/soal-data.js) belum termuat. Pastikan file tersebut di-include sebelum assessment.js di index.html.</p>
                     </div>
-                `;
-            });
+                </div>
+            `;
+            return;
+        }
+
+        this.questions = data;
+        this.renderQuestion(target);
     },
 
     renderQuestion(target) {
@@ -61,7 +61,7 @@ window.TL.Assessment = {
         target.innerHTML = html;
 
         const opts = target.querySelectorAll('.option-btn');
-        const btnNext = target.getElementById('btn-next');
+        const btnNext = target.querySelector('#btn-next');
         let selectedIdx = -1;
 
         opts.forEach(btn => {
