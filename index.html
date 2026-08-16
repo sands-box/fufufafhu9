@@ -3,23 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> </title>
+    <title>Aplikasi Edukasi</title>
     
-    <!-- Google Fonts: Poppins (Heading) & Inter (Body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <!-- CSS Styles -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/narasi.css">
     <link rel="stylesheet" href="css/eksplorasi.css">
+
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        .avatar-container img {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+        }
+        .soal-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: inline-block;
+            text-align: left;
+            min-width: 300px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Main Application Container -->
+
+    <div class="avatar-container">
+        <img src="assets/images/avatar-senang.png" alt="Senang" id="img-senang">
+        <img src="assets/images/avatar-netral.png" alt="Netral" id="img-netral">
+        <img src="assets/images/avatar-kecewa.png" alt="Kecewa" id="img-kecewa">
+    </div>
+
+    <div class="soal-container">
+        <h2 id="teks-soal">Memuat data soal...</h2>
+        <div id="data-tambahan"></div>
+    </div>
+
     <div id="app"></div>
 
-    <!-- 3rd Party Libraries: Offline copy with CDN fallback -->
     <script src="lib/three.core.min.js"></script>
     <script src="lib/jspdf.umd.min.js"></script>
     <script>
@@ -31,7 +61,6 @@
         }
     </script>
 
-    <!-- Application Scripts -->
     <script src="js/app.js"></script>
     <script src="js/narasi.js"></script>
     <script src="js/form.js"></script>
@@ -42,5 +71,16 @@
     <script src="js/temuan.js"></script>
     <script src="js/assessment.js"></script>
     <script src="js/certificate.js"></script>
+
+    <script>
+        fetch('assets/data/soal.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('teks-soal').innerText = JSON.stringify(data);
+            })
+            .catch(error => {
+                document.getElementById('teks-soal').innerText = "Gagal memuat assets/data/soal.json. Pastikan folder assets sudah diekstrak.";
+            });
+    </script>
 </body>
 </html>
