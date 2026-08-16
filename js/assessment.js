@@ -11,7 +11,7 @@ window.TL.Assessment = {
         this.score = 0;
         this.userAnswers = [];
         
-        fetch('assets/data/soal.json')
+        fetch('./assets/data/soal.json')
             .then(res => res.json())
             .then(data => {
                 this.questions = data;
