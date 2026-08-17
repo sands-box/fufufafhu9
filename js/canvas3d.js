@@ -31,7 +31,7 @@ window.TL.Canvas3D = {
         let controlsHTML = '';
         if (moduleId === 'refleksi') {
             controlsHTML = `
-                <div class="slider-row"><div class="slider-label"><span>Jarak ke Cermin (X)</span><b id="v-x">2.0</b></div><input type="range" id="s-x" min="0" max="7" step="0.5" value="3"></div>
+                <div class="slider-row"><div class="slider-label"><span>Jarak ke Cermin (X)</span><b id="v-x">2.0</b></div><input type="range" id="s-x" min="0" max="6" step="0.5" value="2"></div>
                 <div class="slider-row"><div class="slider-label"><span>Kiri &harr; Kanan (Y)</span><b id="v-z">0.0</b></div><input type="range" id="s-z" min="-7" max="7" step="0.5" value="0"></div>
                 <div class="slider-row"><div class="slider-label"><span>Atas &#8597; Bawah (Z)</span><b id="v-y">0.0</b></div><input type="range" id="s-y" min="-7" max="7" step="0.5" value="0"></div>
                 <label class="checkbox-label"><input type="checkbox" id="s-bantu"> Tampilkan Garis Bantu</label>
@@ -137,19 +137,25 @@ window.TL.Canvas3D = {
         const update = () => {
             clearBantu();
             if (moduleId === 'refleksi') {
-                const x = parseFloat(sX.value), y = parseFloat(sY.value), z = parseFloat(sZ.value);
-                vX.innerText = x.toFixed(1); vY.innerText = y.toFixed(1); vZ.innerText = z.toFixed(1);
+                const rawX = parseFloat(sX.value);
+                const x = rawX + 1;
+                const y = parseFloat(sY.value), z = parseFloat(sZ.value);
+                vX.innerText = rawX.toFixed(1);
+                vY.innerText = y.toFixed(1);
+                vZ.innerText = z.toFixed(1);
                 meshAsal.position.set(x, y, z);
                 meshBayangan.position.set(-x, y, z);
-                const faceDist = Math.max(0, x - HALF);
+                const faceDist = rawX;
                 container.querySelector('#j-asal').innerText = faceDist.toFixed(1);
                 container.querySelector('#j-bayangan').innerText = faceDist.toFixed(1);
                 if (sBantu.checked) {
-                    addDashedLine(new THREE.Vector3(x,y,z), new THREE.Vector3(-x,y,z));
+                    addDashedLine(new THREE.Vector3(x, y, z), new THREE.Vector3(-x, y, z));
                 }
             } else if (moduleId === 'translasi') {
                 const dx = parseFloat(sX.value), dy = parseFloat(sY.value), dz = parseFloat(sZ.value);
-                vX.innerText = dx.toFixed(1); vY.innerText = dy.toFixed(1); vZ.innerText = dz.toFixed(1);
+                vX.innerText = dx.toFixed(1);
+                vY.innerText = dy.toFixed(1);
+                vZ.innerText = dz.toFixed(1);
                 meshAsal.position.set(-2, -2, 0);
                 meshBayangan.position.set(-2 + dx, -2 + dy, dz);
                 container.querySelector('#j-vektor').innerText = `(${dx.toFixed(1)}, ${dy.toFixed(1)}, ${dz.toFixed(1)})`;
@@ -168,23 +174,25 @@ window.TL.Canvas3D = {
                 meshBayangan.position.set(radius * Math.cos(rad), y, -radius * Math.sin(rad));
                 container.querySelector('#j-radius').innerText = radius.toFixed(1);
                 if (sBantu.checked) {
-                    addDashedLine(new THREE.Vector3(0,y,0), meshAsal.position.clone(), 0x38bdf8);
-                    addDashedLine(new THREE.Vector3(0,y,0), meshBayangan.position.clone(), 0xf59e42);
+                    addDashedLine(new THREE.Vector3(0, y, 0), meshAsal.position.clone(), 0x38bdf8);
+                    addDashedLine(new THREE.Vector3(0, y, 0), meshBayangan.position.clone(), 0xf59e42);
                 }
             } else if (moduleId === 'dilatasi') {
                 const x = parseFloat(sX.value), y = parseFloat(sY.value), z = parseFloat(sZ.value);
                 const k = parseFloat(container.querySelector('#s-k').value);
-                vX.innerText = x.toFixed(1); vY.innerText = y.toFixed(1); vZ.innerText = z.toFixed(1);
+                vX.innerText = x.toFixed(1);
+                vY.innerText = y.toFixed(1);
+                vZ.innerText = z.toFixed(1);
                 container.querySelector('#v-k').innerText = k.toFixed(1);
                 meshAsal.position.set(x, y, z);
-                meshBayangan.position.set(x*k, y*k, z*k);
+                meshBayangan.position.set(x * k, y * k, z * k);
                 meshBayangan.scale.setScalar(Math.max(0.3, Math.abs(k)));
-                const distP = Math.max(0, Math.hypot(x,y,z) - HALF);
-                const distP2 = Math.max(0, Math.hypot(x*k,y*k,z*k) - HALF * Math.max(0.3, Math.abs(k)));
+                const distP = Math.max(0, Math.hypot(x, y, z) - HALF);
+                const distP2 = Math.max(0, Math.hypot(x * k, y * k, z * k) - HALF * Math.max(0.3, Math.abs(k)));
                 container.querySelector('#j-op').innerText = distP.toFixed(1) + ' satuan';
                 container.querySelector('#j-op2').innerText = distP2.toFixed(1) + ' satuan';
                 if (sBantu.checked) {
-                    addDashedLine(new THREE.Vector3(0,0,0), meshBayangan.position.clone(), 0xf59e42);
+                    addDashedLine(new THREE.Vector3(0, 0, 0), meshBayangan.position.clone(), 0xf59e42);
                 }
             }
         };
