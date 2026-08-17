@@ -1,0 +1,379 @@
+.scene-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, var(--color-navy-deep) 0%, var(--color-navy) 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+  animation: kenburns 11s ease-in-out infinite alternate;
+}
+
+.bg-image.no-zoom {
+  animation: none;
+}
+
+.bg-image.bg-hidden,
+.bg-gradient.bg-hidden {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes kenburns {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.12); }
+}
+
+.landing-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(15,23,41,0.25) 0%, rgba(15,23,41,0.55) 55%, rgba(15,23,41,0.88) 100%);
+}
+
+.app-blackout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.app-blackout.active {
+  opacity: 1;
+}
+
+.landing-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+  max-width: 800px;
+}
+
+.scene-gear {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 25;
+  background-color: rgba(15, 23, 41, 0.5) !important;
+}
+
+.landing-curve-text {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: block;
+}
+
+.landing-title {
+  font-size: 4.6rem;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+  -webkit-text-stroke: 1.5px rgba(15, 23, 41, 0.65);
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.35);
+  letter-spacing: 2px;
+  animation: titleIn 0.8s ease both;
+}
+
+.landing-subtitle {
+  font-size: 1.25rem;
+  color: var(--color-warm-light);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  animation: subtitleIn 0.8s ease 0.2s both;
+}
+
+.landing-badges {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.landing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid;
+  opacity: 0;
+  animation: badgeIn 0.5s ease forwards;
+}
+
+.landing-badge:nth-child(1) { animation-delay: 0.6s; }
+.landing-badge:nth-child(2) { animation-delay: 0.75s; }
+.landing-badge:nth-child(3) { animation-delay: 0.9s; }
+.landing-badge:nth-child(4) { animation-delay: 1.05s; }
+
+.landing-content #btn-start {
+  opacity: 0;
+  animation: btnIn 0.6s ease 1.2s both;
+  background-color: var(--color-start-green);
+  color: #062e17;
+}
+
+.landing-content #btn-start:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.55);
+}
+
+@keyframes titleIn { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes subtitleIn { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 0.9; transform: translateY(0); } }
+@keyframes badgeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes btnIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+
+.chat-wrapper {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 800px;
+  z-index: 20;
+}
+
+.chat-wrapper.chat-pop {
+  animation: chatPopIn 0.85s ease both;
+}
+
+.chat-wrapper.chat-out {
+  animation: chatPopOut 0.5s ease forwards;
+}
+
+@keyframes chatPopIn {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(28px) scale(0.97); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+@keyframes chatPopOut {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(16px) scale(0.97); }
+}
+
+.chat-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  background-color: rgba(15, 23, 41, 0.9);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.chat-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-accent-blue);
+  background-color: var(--color-navy);
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+.chat-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-bubble {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--color-warm-light);
+  margin-bottom: 20px;
+  min-height: 60px; 
+}
+
+.chat-action {
+  display: flex;
+  gap: 10px;
+  align-self: flex-end;
+}
+
+.chat-action .btn {
+  padding: 10px 22px;
+  font-size: 0.92rem;
+}
+
+.chat-action .btn.btn-start-action {
+  background-color: var(--color-start-green);
+  color: #062e17;
+}
+
+.chat-action .btn.btn-start-action:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.55);
+}
+
+
+.letter-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 90%;
+  max-width: 600px;
+  margin-bottom: 120px; 
+}
+
+.letter-image {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.email-notif-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.email-notif-icon {
+  width: 140px;
+  height: 140px;
+  animation: emailFloat 2.2s ease-in-out infinite, emailGlow 2.2s ease-in-out infinite;
+}
+
+.email-notif-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-navy-deep);
+  animation: badgePulse 1.4s ease-in-out infinite;
+}
+
+.email-notif-hint {
+  font-size: 0.9rem;
+  color: var(--color-gold);
+  opacity: 0.85;
+  margin-top: -1cm;
+  animation: hintBlink 1.6s ease-in-out infinite;
+}
+
+.email-inline {
+  animation: emailInlineIn 0.6s ease both;
+}
+
+@keyframes emailInlineIn {
+  0%   { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.email-notif-wrapper.opening {
+  pointer-events: none;
+}
+
+.email-notif-wrapper.opening .email-notif-icon {
+  animation: emailOpen 0.5s ease forwards;
+}
+
+.email-notif-wrapper.opening .email-notif-badge,
+.email-notif-wrapper.opening .email-notif-hint {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+@keyframes emailFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-14px) rotate(2deg); }
+}
+
+@keyframes emailGlow {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
+  50% { filter: drop-shadow(0 0 25px rgba(56, 189, 248, 0.8)); }
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes hintBlink {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes emailOpen {
+  0% { transform: scale(1) rotate(0); opacity: 1; }
+  50% { transform: scale(1.3) rotate(8deg); opacity: 1; }
+  100% { transform: scale(0.3) rotate(0); opacity: 0; }
+}
+
+.waiting-dots {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 16px;
+}
+
+.waiting-dots span {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-warm-light);
+  opacity: 0.25;
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+.waiting-dots span:nth-child(1) { animation-delay: 0s; }
+.waiting-dots span:nth-child(2) { animation-delay: 0.2s; }
+.waiting-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.25; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
