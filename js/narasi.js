@@ -198,9 +198,19 @@ window.TL.Narasi = {
         });
     },
 
-    _mountClickableEmail(scene) {
+    _mountClickableEmail(scene, options = {}) {
         const wrapper = document.createElement('div');
         wrapper.className = 'email-notif-wrapper email-inline';
+
+        if (options.disabled) {
+            wrapper.style.pointerEvents = 'none';
+            wrapper.style.opacity = '0.5';
+            wrapper.style.filter = 'grayscale(0.7)';
+        }
+
+        wrapper.style.position = 'relative';
+        wrapper.style.zIndex = '20';
+
         wrapper.innerHTML = `
             <div style="position:relative;">
                 <svg class="email-notif-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -213,12 +223,26 @@ window.TL.Narasi = {
         `;
         scene.appendChild(wrapper);
 
-        wrapper.addEventListener('click', () => {
-            wrapper.classList.add('opening');
-            setTimeout(() => {
-                this._transitionTo('narasi5');
-            }, 500);
-        }, { once: true });
+        const enable = () => {
+            wrapper.style.pointerEvents = 'auto';
+            wrapper.style.opacity = '1';
+            wrapper.style.filter = 'none';
+            wrapper.classList.add('email-enabled');
+            wrapper.addEventListener('click', () => {
+                wrapper.classList.add('opening');
+                setTimeout(() => {
+                    this._transitionTo('narasi5');
+                }, 500);
+            }, { once: true });
+        };
+
+        wrapper._enableEmail = enable;
+
+        if (!options.disabled) {
+            enable();
+        }
+
+        return wrapper;
     },
 
     renderLanding(target) {
@@ -312,15 +336,30 @@ window.TL.Narasi = {
 
     renderScene4(target) {
         const scene = this._createSceneBase(target, 'assets/images/bg-t4-email-masuk.jpg', true);
+
+        const emailWrapper = this._mountClickableEmail(scene, { disabled: true });
+
         const dialogs = [
-            { text: "Eh, ada email masuk! Jantungku berdebar nih...", avatar: "assets/images/avatar-antusias.jpg", sfxOnStart: "assets/audio/notif-email.mp3" },
-            { text: "Hasil Seleksi Studio Arsitek Pola... ini dari yang kemarin!", avatar: "assets/images/avatar-antusias.jpg" },
+            {
+                text: "Eh, ada email masuk! Jantungku berdebar nih...",
+                avatar: "assets/images/avatar-antusias.jpg",
+                sfxOnStart: "assets/audio/notif-email.mp3"
+            },
+            {
+                text: "Hasil Seleksi Studio Arsitek Pola... ini dari yang kemarin!",
+                avatar: "assets/images/avatar-antusias.jpg"
+            },
             {
                 text: "Semoga kabar baik. Ayo kita buka!",
                 hideButton: true,
-                onTyped: () => this._mountClickableEmail(scene)
+                onTyped: () => {
+                    if (emailWrapper && typeof emailWrapper._enableEmail === 'function') {
+                        emailWrapper._enableEmail();
+                    }
+                }
             }
         ];
+
         const opts = { sceneName: 'narasi4' };
         if (this._viaTransition) opts.startDelay = 1400;
         this.renderChatBubbles(scene, dialogs, null, "assets/images/avatar-netral.png", "NEXT", opts);
