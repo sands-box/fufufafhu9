@@ -214,7 +214,7 @@ window.TL.Narasi = {
     wrapper.innerHTML = `
         <div style="position:relative;">
             <img src="assets/images/email-icon.png" class="email-notif-icon" alt="Email" style="width:110px; aspect-ratio:2342/1792; object-fit:contain;">
-            <div class="email-notif-badge" style="position:absolute; top:12px; right:18px;">1</div>
+            <div class="email-notif-badge" style="position:absolute; top:12px; right:0px;">1</div>
         </div>
         <div class="email-notif-hint" style="display:${options.disabled ? 'none' : 'block'};">Klik dan buka emailnya</div>
     `;
