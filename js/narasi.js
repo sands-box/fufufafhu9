@@ -199,54 +199,55 @@ window.TL.Narasi = {
     },
 
     _mountClickableEmail(scene, options = {}) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'email-notif-wrapper email-inline';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'email-notif-wrapper email-inline';
 
-    if (options.disabled) {
-        wrapper.style.pointerEvents = 'none';
-        wrapper.style.opacity = '0.5';
-        wrapper.style.filter = 'grayscale(0.7)';
-    }
+        if (options.disabled) {
+            wrapper.style.pointerEvents = 'none';
+            wrapper.style.opacity = '0.5';
+            wrapper.style.filter = 'grayscale(0.7)';
+        }
 
-    wrapper.style.position = 'relative';
-    wrapper.style.top = '-13px';
-    wrapper.style.zIndex = '20';
+        wrapper.style.position = 'relative';
+        wrapper.style.top = '-13px';
+        wrapper.style.zIndex = '20';
 
-    wrapper.innerHTML = `
-        <div style="position:relative;">
-            <img src="assets/images/email-icon.png" class="email-notif-icon" alt="Email" style="width:110px; aspect-ratio:2342/1792; object-fit:contain;">
-            <div class="email-notif-badge" style="position:absolute; top:12px; right:0px;">1</div>
-        </div>
-        <div class="email-notif-hint" style="display:${options.disabled ? 'none' : 'block'};">Klik dan buka emailnya</div>
-    `;
-    scene.appendChild(wrapper);
+        wrapper.innerHTML = `
+            <div style="position:relative;">
+                <img src="assets/images/email-icon.png" class="email-notif-icon" alt="Email" style="width:110px; aspect-ratio:2342/1792; object-fit:contain;">
+                <div class="email-notif-badge" style="position:absolute; top:12px; right:0px;">1</div>
+            </div>
+            <div class="email-notif-hint" style="display:${options.disabled ? 'none' : 'block'};">Klik dan buka emailnya</div>
+        `;
+        scene.appendChild(wrapper);
 
-    const hintEl = wrapper.querySelector('.email-notif-hint');
+        const hintEl = wrapper.querySelector('.email-notif-hint');
 
-    const enable = () => {
-        wrapper.style.pointerEvents = 'auto';
-        wrapper.style.opacity = '1';
-        wrapper.style.filter = 'none';
-        wrapper.classList.add('email-enabled');
-        if (hintEl) hintEl.style.display = 'block';
-        wrapper.addEventListener('click', () => {
-            wrapper.classList.add('opening');
-            setTimeout(() => {
-                this._transitionTo('narasi5');
-            }, 500);
-        }, { once: true });
-    };
+        const enable = () => {
+            wrapper.style.pointerEvents = 'auto';
+            wrapper.style.opacity = '1';
+            wrapper.style.filter = 'none';
+            wrapper.classList.add('email-enabled');
+            if (hintEl) hintEl.style.display = 'block';
+            wrapper.addEventListener('click', () => {
+                wrapper.classList.add('opening');
+                setTimeout(() => {
+                    this._transitionTo('narasi5');
+                }, 500);
+            }, { once: true });
+        };
 
-    wrapper._enableEmail = enable;
+        wrapper._enableEmail = enable;
 
-    if (!options.disabled) {
-        enable();
-    }
+        if (!options.disabled) {
+            enable();
+        }
 
-    return wrapper;
+        return wrapper;
     },
 
     renderLanding(target) {
+        window.TL.Audio.playSingleLoop('assets/audio/nostalgic-childhood.mp3');
         const scene = this._createSceneBase(target, 'assets/images/bg-landing.jpg');
 
         const scrim = document.createElement('div');
