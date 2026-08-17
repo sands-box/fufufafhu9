@@ -1,12 +1,21 @@
 window.TL = window.TL || {};
 
 window.TL.Form = {
+    _kembaliAwal() {
+        if (window.TL.Audio && typeof window.TL.Audio.stop === 'function') {
+            window.TL.Audio.stop();
+        }
+        window.TL.State.reset();
+        window.TL.App.navigate('landing');
+    },
+
     render(target) {
         target.innerHTML = `
             <div class="flex-center form-bg-wrapper" style="width: 100%; height: 100vh; position: relative; overflow: hidden;">
                 <div class="form-bg-image"></div>
                 <div class="form-bg-scrim"></div>
                 <button class="btn-settings-gear scene-gear" id="btn-gear-form" title="Pengaturan" style="z-index:3;">&#9881;</button>
+                <button class="btn btn-secondary" id="btn-kembali-awal-form" title="Kembali ke Awal Cerita" style="position:absolute; bottom:24px; right:24px; z-index:3; font-size:0.85rem; padding:10px 18px;">&#8592; Kembali ke Awal Cerita</button>
                 <div class="form-container" style="position: relative; z-index: 2;">
                     <h2 class="text-center" style="margin-bottom: 24px; color: var(--color-accent-amber);">Identitas Magang</h2>
                     <form id="magang-form">
@@ -27,6 +36,7 @@ window.TL.Form = {
         `;
 
         target.querySelector('#btn-gear-form').addEventListener('click', () => window.TL.Settings.show());
+        target.querySelector('#btn-kembali-awal-form').addEventListener('click', () => this._kembaliAwal());
 
         const form = target.querySelector('#magang-form');
         const inputNama = target.querySelector('#nama');
