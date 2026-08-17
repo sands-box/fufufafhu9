@@ -213,10 +213,7 @@ window.TL.Narasi = {
 
         wrapper.innerHTML = `
             <div style="position:relative;">
-                <svg class="email-notif-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="8" y="22" width="84" height="60" rx="6" fill="#1a2744" stroke="#38bdf8" stroke-width="3"/>
-                    <path d="M12 26 L50 56 L88 26" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <img src="assets/images/email-icon.png" class="email-notif-icon" alt="Email" style="width:90px; aspect-ratio:2342/1792; object-fit:contain;">
                 <div class="email-notif-badge">1</div>
             </div>
             <div class="email-notif-hint" style="display:${options.disabled ? 'none' : 'block'};">Klik dan buka emailnya</div>
