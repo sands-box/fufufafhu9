@@ -56,7 +56,7 @@ window.TL.Assessment = {
                 <div class="flex-center" style="background-color: var(--color-navy-deep);">
                     <div style="background-color: var(--color-navy); padding: 40px; border-radius: 12px; max-width: 600px; text-align: center; border: 1px solid var(--color-accent-amber);">
                         <h2 style="color: var(--color-accent-amber); margin-bottom: 16px;">Gagal Memuat Soal</h2>
-                        <p style="color: var(--color-warm-light); font-size: 1.1rem; line-height: 1.6;">Data soal (js/soal-data.js) belum termuat.</p>
+                        <p style="color: var(--color-warm-light); font-size: 1.1rem; line-height: 1.6;">Data soal (/assets/data/soal.js) belum termuat.</p>
                     </div>
                 </div>
             `;
