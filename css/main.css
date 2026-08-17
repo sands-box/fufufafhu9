@@ -4,12 +4,16 @@
   --color-accent-blue: #38bdf8;
   --color-accent-amber: #f59e42;
   --color-warm-light: #fef3c7;
-  
+  --color-teal: #14b8a6;
+  --color-teal-dark: #0d9488;
 
   --color-refleksi: #38bdf8;
   --color-translasi: #f59e42;
   --color-rotasi: #a78bfa;
   --color-dilatasi: #34d399;
+
+  --color-gold: #fbbf24;
+  --color-start-green: #22c55e;
 }
 
 * {
@@ -55,12 +59,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary {
-  background-color: var(--color-accent-blue);
-  color: var(--color-navy-deep);
+  background-color: var(--color-teal);
+  color: #062e2a;
 }
 
 .btn-primary:hover:not(:disabled) {
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 20px rgba(20, 184, 166, 0.5);
   transform: translateY(-2px);
 }
 
@@ -78,6 +82,22 @@ h1, h2, h3, h4, h5, h6 {
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.form-bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/images/bg-identitas.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.form-bg-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 41, 0.55);
+  z-index: 1;
 }
 
 .form-container {
@@ -205,3 +225,40 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 .hidden { display: none !important; }
+
+.option-btn.correct {
+  background-color: rgba(34, 197, 94, 0.18) !important;
+  border-color: #22c55e !important;
+  color: #bbf7d0 !important;
+}
+.option-btn.wrong {
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: #ef4444 !important;
+  color: #fecaca !important;
+}
+.option-btn:disabled { cursor: default; opacity: 1; }
+
+.cek-hint {
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: var(--color-teal);
+  font-style: italic;
+  min-height: 1.2em;
+}
+
+.pembahasan-box {
+  background-color: var(--color-navy);
+  border: 1px solid rgba(245, 158, 66, 0.4);
+  border-radius: 12px;
+  padding: 24px;
+}
+.pembahasan-box h4 {
+  color: var(--color-accent-amber);
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+.pembahasan-box p {
+  color: var(--color-warm-light);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}

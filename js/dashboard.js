@@ -12,7 +12,8 @@ window.TL.Dashboard = {
         ];
 
         let html = `
-            <div style="padding: 40px; width: 100%; max-width: 1000px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column;">
+            <div style="padding: 40px; width: 100%; max-width: 1000px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; position: relative;">
+                <button class="btn-settings-gear scene-gear" id="btn-gear-dash" title="Pengaturan">&#9881;</button>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(254, 243, 199, 0.1); padding-bottom: 20px;">
                     <div>
                         <h2 style="color: var(--color-accent-amber); font-size: 2rem;">Studio Arsitek Pola</h2>
@@ -23,11 +24,20 @@ window.TL.Dashboard = {
                         <h3 id="progress-text" style="font-size: 1.5rem; margin-top: 4px;">0/4</h3>
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 40px;" id="folder-grid"></div>
+                <p style="background: rgba(20,184,166,0.08); border-left: 4px solid var(--color-teal); padding: 12px 16px; border-radius: 4px; color: var(--color-warm-light); font-size: 0.9rem; margin-bottom: 28px;">
+                    Selesaikan keempat modul di bawah ini (Pemantik + Eksplorasi &amp; Temuan) terlebih dahulu sebelum bisa mengikuti Uji Kompetensi.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 24px;" id="folder-grid"></div>
+                <div style="margin-bottom: 40px;">
+                    <button class="btn btn-secondary" id="btn-eksplorasi-hub" style="width:100%; padding: 16px;">&#128269; Eksplorasi Bebas &mdash; Coba Semua Modul Tanpa Pertanyaan</button>
+                </div>
                 <div id="action-container" style="text-align: center; margin-top: auto; padding-bottom: 40px; min-height: 80px;"></div>
             </div>
         `;
         target.innerHTML = html;
+
+        target.querySelector('#btn-gear-dash').addEventListener('click', () => window.TL.Settings.show());
+        target.querySelector('#btn-eksplorasi-hub').addEventListener('click', () => window.TL.App.navigate('eksplorasiHub'));
 
         const grid = target.querySelector('#folder-grid');
         modules.forEach(m => {
@@ -45,7 +55,7 @@ window.TL.Dashboard = {
                 transition: all 0.3s;
                 box-shadow: ${isCompleted ? `0 0 15px ${m.color}40` : 'none'};
             `;
-            
+
             card.onmouseover = () => {
                 card.style.transform = 'translateY(-5px)';
                 card.style.boxShadow = `0 10px 20px ${isCompleted ? m.color + '60' : 'rgba(56, 189, 248, 0.2)'}`;
@@ -81,17 +91,24 @@ window.TL.Dashboard = {
     },
 
     openModule(target, moduleId) {
+        const startTab = window.TL.State.data.progress[moduleId] ? 'eksplorasi' : 'pemantik';
+
         target.innerHTML = `
             <div class="module-wrapper">
                 <div class="module-sidebar">
                     <div class="module-sidebar-header">
-                        <button class="btn btn-secondary btn-back" id="btn-back">⬅ Dashboard</button>
+                        <div class="sidebar-top-row">
+                            <button class="btn-back" id="btn-back">&larr; Dashboard</button>
+                            <button class="btn-petunjuk" id="btn-petunjuk">&#128214; Petunjuk</button>
+                        </div>
                         <h3 class="module-title" style="color: var(--color-${moduleId});">${moduleId}</h3>
                     </div>
                     <div class="sidebar-nav">
-                        <button class="nav-btn active" data-tab="materi">Materi</button>
-                        <button class="nav-btn" data-tab="eksplorasi">Eksplorasi</button>
-                        <button class="nav-btn" data-tab="temuan">Temuan & Simpulan</button>
+                        <button class="nav-btn${startTab === 'pemantik' ? ' active' : ''}" data-tab="pemantik">Pemantik</button>
+                        <button class="nav-btn${startTab === 'eksplorasi' ? ' active' : ''}" data-tab="eksplorasi">Eksplorasi &amp; Temuan</button>
+                    </div>
+                    <div class="sidebar-footer">
+                        <button class="btn-settings-gear" id="btn-settings-gear" title="Pengaturan" aria-label="Pengaturan">&#9881;</button>
                     </div>
                 </div>
                 <div class="module-content-area" id="module-content"></div>
@@ -99,7 +116,9 @@ window.TL.Dashboard = {
         `;
 
         target.querySelector('#btn-back').onclick = () => window.TL.App.navigate('dashboard');
-        
+        target.querySelector('#btn-petunjuk').onclick = () => window.TL.Petunjuk.show(moduleId);
+        target.querySelector('#btn-settings-gear').onclick = () => window.TL.Settings.show();
+
         const menus = target.querySelectorAll('.nav-btn');
         const contentArea = target.querySelector('#module-content');
 
@@ -109,13 +128,11 @@ window.TL.Dashboard = {
             if (activeMenu) activeMenu.classList.add('active');
 
             contentArea.innerHTML = '';
-            
-            if (tabName === 'materi') {
-                window.TL.Materi.render(contentArea, moduleId);
+
+            if (tabName === 'pemantik') {
+                window.TL.Pemantik.render(contentArea, moduleId);
             } else if (tabName === 'eksplorasi') {
-                window.TL.Canvas2D.render(contentArea, moduleId);
-            } else if (tabName === 'temuan') {
-                window.TL.Temuan.render(contentArea, moduleId);
+                window.TL.Gabungan.render(contentArea, moduleId);
             }
         };
 
@@ -123,6 +140,6 @@ window.TL.Dashboard = {
             btn.onclick = () => switchTab(btn.dataset.tab);
         });
 
-        switchTab('materi');
+        switchTab(startTab);
     }
 };

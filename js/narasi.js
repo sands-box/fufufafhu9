@@ -1,94 +1,287 @@
 window.TL = window.TL || {};
 
 window.TL.Narasi = {
-    
-    renderChatBubbles(containerEl, arrayDialog, onSelesai, avatarUrl = "assets/images/avatar-netral.png", finalBtnText = "NEXT") {
+
+    _prevScene: {
+        narasi3: 'narasi2',
+        narasi4: 'narasi3',
+        narasi5: 'narasi4',
+        narasi6: 'narasi5'
+    },
+
+    renderChatBubbles(containerEl, dialogItems, onSelesai, defaultAvatar = "assets/images/avatar-netral.png", finalBtnText = "NEXT", options = {}) {
+        const items = dialogItems.map(d => typeof d === 'string' ? { text: d } : d);
         let currentIndex = 0;
+        let typeTimer = null;
+        const prevScreen = options.sceneName ? this._prevScene[options.sceneName] : null;
 
         const chatWrapper = document.createElement('div');
         chatWrapper.className = 'chat-wrapper';
-        
-        chatWrapper.innerHTML = `
-            <div class="chat-container">
-                <img class="chat-avatar" src="${avatarUrl}" alt="Avatar">
-                <div class="chat-content">
-                    <div class="chat-bubble" id="chat-text">${arrayDialog[0]}</div>
-                    <div class="chat-action">
-                        <button class="btn btn-primary" id="chat-btn">
-                            ${arrayDialog.length === 1 ? finalBtnText : "NEXT"}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        
         containerEl.appendChild(chatWrapper);
 
-        const btn = chatWrapper.querySelector('#chat-btn');
-        const text = chatWrapper.querySelector('#chat-text');
+        const bgEl = containerEl.querySelector('.bg-image, .bg-gradient');
 
-        btn.addEventListener('click', () => {
-            currentIndex++;
-            if (currentIndex < arrayDialog.length) {
-                text.innerText = arrayDialog[currentIndex];
-                if (currentIndex === arrayDialog.length - 1) {
-                    btn.innerText = finalBtnText;
+        const typeText = (el, fullText, onDone) => {
+            clearTimeout(typeTimer);
+            el.innerText = '';
+            let i = 0;
+            window.TL.Audio.startTyping();
+            const tick = () => {
+                i++;
+                el.innerText = fullText.slice(0, i);
+                if (i < fullText.length) {
+                    typeTimer = setTimeout(tick, 40);
+                } else {
+                    window.TL.Audio.stopTyping();
+                    if (typeof onDone === 'function') onDone();
                 }
-            } else {
-                if (typeof onSelesai === 'function') {
-                    onSelesai();
-                }
+            };
+            tick();
+        };
+
+        const mountLine = (index) => {
+            const item = items[index];
+            const avatarUrl = item.avatar || defaultAvatar;
+            const isLast = index === items.length - 1;
+            const showButton = !item.hideButton;
+            const btnClass = (isLast && options.finalBtnClass) ? ' ' + options.finalBtnClass : '';
+            const showBack = index > 0 || !!prevScreen;
+
+            chatWrapper.innerHTML = `
+                <div class="chat-container">
+                    <img class="chat-avatar" src="${avatarUrl}" alt="Avatar">
+                    <div class="chat-content">
+                        <div class="chat-bubble" id="chat-text"></div>
+                        ${showButton ? `
+                        <div class="chat-action">
+                            ${showBack ? `<button class="btn btn-secondary" id="chat-back-btn">Kembali</button>` : ''}
+                            <button class="btn btn-primary${btnClass}" id="chat-btn" disabled>${isLast ? finalBtnText : "NEXT"}</button>
+                        </div>` : ''}
+                    </div>
+                </div>
+            `;
+            chatWrapper.classList.remove('chat-pop');
+            void chatWrapper.offsetWidth;
+            chatWrapper.classList.add('chat-pop');
+
+            if (item.sfxOnStart) window.TL.Audio.playSFX(item.sfxOnStart);
+
+            const textEl = chatWrapper.querySelector('#chat-text');
+            const btn = chatWrapper.querySelector('#chat-btn');
+            const backBtn = chatWrapper.querySelector('#chat-back-btn');
+
+            typeText(textEl, item.text, () => {
+                if (btn) btn.disabled = false;
+                if (typeof item.onTyped === 'function') item.onTyped();
+            });
+
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    if (currentIndex > 0) {
+                        goToLine(currentIndex - 1);
+                    } else if (prevScreen) {
+                        this._transitionTo(prevScreen);
+                    }
+                }, { once: true });
             }
-        });
+
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    const nextIndex = currentIndex + 1;
+                    if (nextIndex < items.length) {
+                        goToLine(nextIndex);
+                    } else {
+                        clearTimeout(typeTimer);
+                        window.TL.Audio.stopTyping();
+                        chatWrapper.classList.remove('chat-pop');
+                        chatWrapper.classList.add('chat-out');
+                        chatWrapper.addEventListener('animationend', () => {
+                            if (typeof onSelesai === 'function') onSelesai();
+                        }, { once: true });
+                    }
+                }, { once: true });
+            }
+        };
+
+        const goToLine = (index) => {
+            const item = items[index];
+            if (item.blackout) {
+                clearTimeout(typeTimer);
+                window.TL.Audio.stopTyping();
+                chatWrapper.classList.remove('chat-pop');
+                chatWrapper.style.opacity = '0';
+                this._playScreenTransition(
+                    () => {
+                        if (!bgEl) return;
+                        if (item.bgSwap) {
+                            bgEl.style.backgroundImage = `url('${item.bgSwap}')`;
+                            bgEl.classList.remove('bg-hidden');
+                        } else {
+                            bgEl.classList.add('bg-hidden');
+                        }
+                    },
+                    undefined,
+                    () => {
+                        chatWrapper.style.opacity = '';
+                        currentIndex = index;
+                        mountLine(index);
+                    }
+                );
+            } else {
+                currentIndex = index;
+                mountLine(index);
+            }
+        };
+
+        if (options.startDelay) {
+            setTimeout(() => goToLine(0), options.startDelay);
+        } else {
+            goToLine(0);
+        }
     },
 
-    _createSceneBase(target, bgType) {
+    _createSceneBase(target, bgType, noZoom = false) {
         target.innerHTML = '';
         const sceneContainer = document.createElement('div');
         sceneContainer.className = 'scene-container';
-        
+
         const bg = document.createElement('div');
         if (bgType === 'gradient') {
             bg.className = 'bg-gradient';
         } else {
-            bg.className = 'bg-image';
+            bg.className = 'bg-image' + (noZoom ? ' no-zoom' : '');
             bg.style.backgroundImage = `url('${bgType}')`;
         }
-        
+
         sceneContainer.appendChild(bg);
+
+        const gear = document.createElement('button');
+        gear.className = 'btn-settings-gear scene-gear';
+        gear.title = 'Pengaturan';
+        gear.innerHTML = '&#9881;';
+        gear.addEventListener('click', () => window.TL.Settings.show());
+        sceneContainer.appendChild(gear);
+
         target.appendChild(sceneContainer);
         return sceneContainer;
     },
 
+    _playScreenTransition(atPeakCallback, holdMs = 800, onComplete) {
+        const fadeMs = 600;
+        const overlay = document.createElement('div');
+        overlay.className = 'app-blackout';
+        document.body.appendChild(overlay);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                overlay.classList.add('active');
+            });
+        });
+
+        setTimeout(() => {
+            if (typeof atPeakCallback === 'function') atPeakCallback();
+            setTimeout(() => {
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    overlay.remove();
+                    if (typeof onComplete === 'function') onComplete();
+                }, fadeMs);
+            }, holdMs);
+        }, fadeMs);
+    },
+
+    _transitionTo(screenName, param) {
+        this._playScreenTransition(() => {
+            this._viaTransition = true;
+            window.TL.App.navigate(screenName, param);
+            this._viaTransition = false;
+        });
+    },
+
+    _mountClickableEmail(scene) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'email-notif-wrapper email-inline';
+        wrapper.innerHTML = `
+            <div style="position:relative;">
+                <svg class="email-notif-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="22" width="84" height="60" rx="6" fill="#1a2744" stroke="#38bdf8" stroke-width="3"/>
+                    <path d="M12 26 L50 56 L88 26" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="email-notif-badge">1</div>
+            </div>
+            <div class="email-notif-hint">Klik dan buka emailnya</div>
+        `;
+        scene.appendChild(wrapper);
+
+        wrapper.addEventListener('click', () => {
+            wrapper.classList.add('opening');
+            setTimeout(() => {
+                this._transitionTo('narasi5');
+            }, 500);
+        }, { once: true });
+    },
+
     renderLanding(target) {
-        const scene = this._createSceneBase(target, 'gradient');
-        
+        const scene = this._createSceneBase(target, 'assets/images/bg-landing.jpg');
+
+        const scrim = document.createElement('div');
+        scrim.className = 'landing-scrim';
+        scene.appendChild(scrim);
+
         const content = document.createElement('div');
         content.className = 'landing-content';
         content.innerHTML = `
-            <h1 class="landing-title">Media Pembelajaran</h1>
-            <p class="landing-subtitle">Transformasi Geometri</p>
-            <button class="btn btn-primary" style="font-size: 1.25rem; padding: 16px 40px;" id="btn-start">START</button>
+            <svg viewBox="0 0 520 110" class="landing-curve-text" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <path id="arcTop" d="M 15 100 A 875 875 0 0 1 505 100" fill="none"/>
+                    <path id="arcBottom" d="M 55 108 A 1061 1061 0 0 1 465 108" fill="none"/>
+                </defs>
+                <text font-family="Poppins, sans-serif" font-size="19" font-weight="700" fill="var(--color-gold)" letter-spacing="2">
+                    <textPath href="#arcTop" startOffset="50%" text-anchor="middle">MEDIA PEMBELAJARAN MATEMATIKA</textPath>
+                </text>
+                <text font-family="Poppins, sans-serif" font-size="14" font-weight="500" fill="var(--color-warm-light)" letter-spacing="1.5">
+                    <textPath href="#arcBottom" startOffset="50%" text-anchor="middle">TRANSFORMASI GEOMETRI</textPath>
+                </text>
+            </svg>
+            <h1 class="landing-title">NARAGEO</h1>
+            <p class="landing-subtitle">Narasi dalam Geometri</p>
+            <div class="landing-badges">
+                <span class="landing-badge" style="border-color: var(--color-refleksi); color: var(--color-refleksi);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21" stroke-dasharray="2 2"/><path d="M4 8 L9 12 L4 16 Z"/><path d="M20 8 L15 12 L20 16 Z"/></svg>
+                    Refleksi
+                </span>
+                <span class="landing-badge" style="border-color: var(--color-translasi); color: var(--color-translasi);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="6" height="6" opacity="0.4"/><rect x="15" y="9" width="6" height="6"/><path d="M9 12 L14 12 M14 12 L11.5 9.5 M14 12 L11.5 14.5"/></svg>
+                    Translasi
+                </span>
+                <span class="landing-badge" style="border-color: var(--color-rotasi); color: var(--color-rotasi);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 3v5h-5"/></svg>
+                    Rotasi
+                </span>
+                <span class="landing-badge" style="border-color: var(--color-dilatasi); color: var(--color-dilatasi);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" opacity="0.5"/><rect x="4" y="4" width="16" height="16"/></svg>
+                    Dilatasi
+                </span>
+            </div>
+            <button class="btn btn-primary" style="font-size: 1.1rem; padding: 13px 34px;" id="btn-start">MULAI</button>
         `;
-        
         scene.appendChild(content);
 
         document.getElementById('btn-start').addEventListener('click', () => {
-            window.TL.App.navigate('narasi2');
+            this._transitionTo('narasi2');
         });
     },
 
     renderScene2(target) {
-        const scene = this._createSceneBase(target, 'assets/images/bg-t2-mencari-kerja.jpg');
+        const scene = this._createSceneBase(target, 'assets/images/bg-t2-mencari-kerja.jpg', true);
         const dialogs = [
-            "Haduh... sudah berminggu-minggu aku mencari pekerjaan, tapi belum ada yang cocok.",
-            "Setiap hari buka laptop, scroll lowongan, kirim lamaran... tapi tidak ada balasan.",
-            "Apa yang salah, ya? Mungkin aku kurang skill?",
-            "Tapi aku tidak boleh menyerah. Ayo coba cari lagi!"
+            { text: "Haduh... sudah berminggu-minggu aku mencari pekerjaan, tapi belum ada yang cocok.", avatar: "assets/images/avatar-kecewa.png" },
+            { text: "Setiap hari buka laptop, scroll lowongan, kirim lamaran... tapi tidak ada balasan. Kira-kira apa yang salah ya? huuumm....", avatar: "assets/images/avatar-kecewa.png" },
+            { text: "Tapi aku tidak boleh menyerah. Ayo coba cari lagi!", avatar: "assets/images/avatar-netral.png" }
         ];
         this.renderChatBubbles(scene, dialogs, () => {
-            window.TL.App.navigate('narasi3');
-        }, "assets/images/avatar-netral.png", "NEXT");
+            this._transitionTo('narasi3');
+        }, "assets/images/avatar-netral.png", "NEXT", { sceneName: 'narasi2', startDelay: 1400 });
     },
 
     renderScene3(target) {
@@ -97,88 +290,82 @@ window.TL.Narasi = {
             "Hmm, banyak juga lowongan yang tersedia...",
             "Arsitek Pola Kreatif? Desainer Struktur? Kedengarannya menarik!",
             "Aku coba apply beberapa. Semoga kali ini ada yang merespons.",
-            "Ya sudah, kirim semua. Tinggal menunggu dan berdoa."
+            { text: "Selesai, aku sudah kirim semua lamaranku, semoga ada yang diterima.", blackout: true, bgSwap: "assets/images/bg-menunggu.jpg" }
         ];
         this.renderChatBubbles(scene, dialogs, () => {
+            this._transitionTo('jedaWaktu');
+        }, "assets/images/avatar-netral.png", "NEXT", { sceneName: 'narasi3', startDelay: 1400 });
+    },
+
+    renderJedaWaktu(target) {
+        const scene = this._createSceneBase(target, 'gradient');
+
+        const dots = document.createElement('div');
+        dots.className = 'waiting-dots';
+        dots.innerHTML = `<span></span><span></span><span></span>`;
+        scene.appendChild(dots);
+
+        setTimeout(() => {
             window.TL.App.navigate('narasi4');
-        }, "assets/images/avatar-netral.png", "NEXT");
+        }, 3000);
     },
 
     renderScene4(target) {
-        const scene = this._createSceneBase(target, 'assets/images/bg-t4-email-masuk.jpg');
+        const scene = this._createSceneBase(target, 'assets/images/bg-t4-email-masuk.jpg', true);
         const dialogs = [
-            "Eh, ada email masuk! Jantungku berdebar nih...",
-            "'Hasil Seleksi — Studio Arsitek Pola'... ini dari yang kemarin!",
-            "Semoga kabar baik. Ayo kita buka!"
+            { text: "Eh, ada email masuk! Jantungku berdebar nih...", avatar: "assets/images/avatar-antusias.jpg", sfxOnStart: "assets/audio/notif-email.mp3" },
+            { text: "Hasil Seleksi Studio Arsitek Pola... ini dari yang kemarin!", avatar: "assets/images/avatar-antusias.jpg" },
+            {
+                text: "Semoga kabar baik. Ayo kita buka!",
+                hideButton: true,
+                onTyped: () => this._mountClickableEmail(scene)
+            }
         ];
-        this.renderChatBubbles(scene, dialogs, () => {
-            window.TL.App.navigate('narasi5');
-        }, "assets/images/avatar-netral.png", "Buka Email");
+        const opts = { sceneName: 'narasi4' };
+        if (this._viaTransition) opts.startDelay = 1400;
+        this.renderChatBubbles(scene, dialogs, null, "assets/images/avatar-netral.png", "NEXT", opts);
     },
 
     renderScene5(target) {
+        window.TL.Audio.stop();
         const scene = this._createSceneBase(target, 'gradient');
 
         const letterWrapper = document.createElement('div');
         letterWrapper.className = 'letter-wrapper';
         letterWrapper.innerHTML = `
-            <div class="letter-document">
-                <div class="letter-header">
-                    <div class="letter-logo"></div>
-                    <div>
-                        <h2 class="letter-title">STUDIO ARSITEK POLA</h2>
-                        <p class="letter-subtitle">Divisi Rekayasa Struktur & Geometri</p>
-                    </div>
-                </div>
-                <div class="letter-body">
-                    <p><strong>Yth. Calon Arsitek,</strong></p>
-                    <p>Selamat! Anda telah <strong>DITERIMA</strong> untuk bergabung dengan tim kami. Namun, sebelum Anda secara resmi memegang proyek, Anda diwajibkan untuk menyelesaikan <strong>Program Magang TransforLab</strong>.</p>
-                    <p>Dalam program magang ini, Anda harus menguasai empat pilar utama transformasi geometri: <strong>Refleksi, Translasi, Rotasi, dan Dilatasi</strong>.</p>
-                    <p>Silakan selesaikan seluruh modul pembelajaran dan uji kompetensi. Kami menunggu Anda di studio kami.</p>
-                </div>
-                <div class="letter-footer">
-                    <div class="letter-stamp">APPROVED</div>
-                    <div class="letter-signature">
-                        <div class="letter-signature-line">K. Studio</div>
-                        <p>Kepala Studio Arsitek Pola</p>
-                    </div>
-                </div>
-            </div>
+            <img src="assets/images/surat-diterima.jpg" alt="Surat Hasil Seleksi - Studio Arsitek Pola" class="letter-image">
         `;
         scene.appendChild(letterWrapper);
 
         const dialogs = [
             "AKU DITERIMA! Ya ampun, akhirnya...!",
-            "Tapi tunggu — ada syaratnya. Aku harus ikut program magang dulu.",
-            "Refleksi, Translasi, Rotasi, Dilatasi... Apa itu semua?",
-            "Tapi ini kesempatanku satu-satunya. Aku harus bisa!"
+            "Tapi tunggu, ada syaratnya. Aku harus ikut program magang dulu.",
+            { text: "Refleksi, Translasi, Rotasi, Dilatasi... Apa itu semua?", avatar: "assets/images/avatar-netral.png" },
+            { text: "Tapi ini kesempatanku satu-satunya. Aku harus bisa!", avatar: "assets/images/avatar-netral.png" }
         ];
-        
+
         this.renderChatBubbles(scene, dialogs, () => {
-            window.TL.App.navigate('narasi6');
-        }, "assets/images/avatar-senang.png", "NEXT");
+            this._transitionTo('narasi6');
+        }, "assets/images/avatar-senang.png", "NEXT", { sceneName: 'narasi5', startDelay: 1400 });
     },
 
     renderScene6(target) {
         const scene = this._createSceneBase(target, 'gradient');
         const dialogs = [
-            "Ini kabar terbaik yang pernah aku terima!",
-            "Aku tidak boleh menyia-nyiakan kesempatan ini.",
-            "Empat skill itu harus aku kuasai — apapun caranya.",
-            "Oke. Aku siap. Saatnya mulai magang!"
+            "Ini kabar terbaik yang pernah aku terima! Aku tidak boleh menyia-nyiakan kesempatan ini. Empat skill itu harus aku kuasai, apapun caranya. Oke, aku siap. Saatnya mulai magang!"
         ];
         this.renderChatBubbles(scene, dialogs, () => {
-            window.TL.App.navigate('form');
-        }, "assets/images/avatar-senang.png", "Mulai Magang");
+            window.TL.Audio.playSingleLoop('assets/audio/stream-cafe.mp3');
+            this._transitionTo('form');
+        }, "assets/images/avatar-senang.png", "Mulai Magang", { sceneName: 'narasi6', finalBtnClass: 'btn-start-action', startDelay: 1400 });
     },
 
     renderTransition(target) {
         const scene = this._createSceneBase(target, 'gradient');
         const dialogs = [
             "Akhirnya... semua materi sudah aku pelajari!",
-            "Refleksi, Translasi, Rotasi, Dilatasi — semuanya sudah aku kuasai.",
-            "Sekarang tinggal satu langkah lagi: Uji Kompetensi.",
-            "Aku harus buktikan bahwa aku layak jadi Arsitek Muda!"
+            "Refleksi, Translasi, Rotasi, Dilatasi, semuanya sudah aku kuasai.",
+            "Sekarang tinggal satu langkah lagi: Uji Kompetensi. Aku harus buktikan bahwa aku layak jadi Arsitek Muda!"
         ];
         this.renderChatBubbles(scene, dialogs, () => {
             window.TL.App.navigate('assessment');

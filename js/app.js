@@ -10,6 +10,7 @@ window.TL.State = {
             rotasi: false,
             dilatasi: false
         },
+        answers: {},
         skor: 0
     },
     
@@ -38,6 +39,7 @@ window.TL.State = {
                 rotasi: false,
                 dilatasi: false
             },
+            answers: {},
             skor: 0
         };
         this.save();
@@ -75,6 +77,9 @@ window.TL.App = {
             case "narasi3":
                 window.TL.Narasi.renderScene3(target);
                 break;
+            case "jedaWaktu":
+                window.TL.Narasi.renderJedaWaktu(target);
+                break;
             case "narasi4":
                 window.TL.Narasi.renderScene4(target);
                 break;
@@ -92,6 +97,9 @@ window.TL.App = {
                 break;
             case "module":
                 window.TL.Dashboard.openModule(target, param);
+                break;
+            case "eksplorasiHub":
+                window.TL.EksplorasiHub.render(target);
                 break;
             case "transition":
                 window.TL.Narasi.renderTransition(target);
