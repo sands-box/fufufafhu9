@@ -344,7 +344,7 @@ window.TL.Narasi = {
             {
                 text: "Eh, ada email masuk! Jantungku berdebar nih...",
                 avatar: "assets/images/avatar-antusias.jpg",
-                sfxOnStart: "assets/audio/notif-email.mp3"
+                sfxOnStart: "assets/audio/sfx_notif-email.mp3"
             },
             {
                 text: "Hasil Seleksi Studio Arsitek Pola... ini dari yang kemarin!",
