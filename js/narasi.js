@@ -219,15 +219,18 @@ window.TL.Narasi = {
                 </svg>
                 <div class="email-notif-badge">1</div>
             </div>
-            <div class="email-notif-hint">Klik dan buka emailnya</div>
+            <div class="email-notif-hint" style="display:${options.disabled ? 'none' : 'block'};">Klik dan buka emailnya</div>
         `;
         scene.appendChild(wrapper);
+
+        const hintEl = wrapper.querySelector('.email-notif-hint');
 
         const enable = () => {
             wrapper.style.pointerEvents = 'auto';
             wrapper.style.opacity = '1';
             wrapper.style.filter = 'none';
             wrapper.classList.add('email-enabled');
+            if (hintEl) hintEl.style.display = 'block';
             wrapper.addEventListener('click', () => {
                 wrapper.classList.add('opening');
                 setTimeout(() => {
