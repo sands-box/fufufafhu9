@@ -31,7 +31,7 @@ window.TL.Canvas3D = {
         let controlsHTML = '';
         if (moduleId === 'refleksi') {
             controlsHTML = `
-                <div class="slider-row"><div class="slider-label"><span>Jarak ke Cermin (X)</span><b id="v-x">2.0</b></div><input type="range" id="s-x" min="1" max="7" step="0.5" value="3"></div>
+                <div class="slider-row"><div class="slider-label"><span>Jarak ke Cermin (X)</span><b id="v-x">2.0</b></div><input type="range" id="s-x" min="0" max="7" step="0.5" value="3"></div>
                 <div class="slider-row"><div class="slider-label"><span>Kiri &harr; Kanan (Y)</span><b id="v-z">0.0</b></div><input type="range" id="s-z" min="-7" max="7" step="0.5" value="0"></div>
                 <div class="slider-row"><div class="slider-label"><span>Atas &#8597; Bawah (Z)</span><b id="v-y">0.0</b></div><input type="range" id="s-y" min="-7" max="7" step="0.5" value="0"></div>
                 <label class="checkbox-label"><input type="checkbox" id="s-bantu"> Tampilkan Garis Bantu</label>
@@ -105,7 +105,7 @@ window.TL.Canvas3D = {
 
         const geo = new THREE.BoxGeometry(2, 2, 2);
         const HALF = 1;
-        const matAsal = new THREE.MeshStandardMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.85 });
+        const matAsal = new THREE.MeshStandardMaterial({ color: 0x38bdf8 });
         const matBayangan = new THREE.MeshStandardMaterial({ color: 0xf59e42 });
         const meshAsal = new THREE.Mesh(geo, matAsal);
         const meshBayangan = new THREE.Mesh(geo, matBayangan);

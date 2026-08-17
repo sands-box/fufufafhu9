@@ -29,7 +29,7 @@ window.TL.Dashboard = {
                 </p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 24px;" id="folder-grid"></div>
                 <div style="margin-bottom: 40px;">
-                    <button class="btn btn-secondary" id="btn-eksplorasi-hub" style="width:100%; padding: 16px;">&#128269; Eksplorasi Bebas &mdash; Coba Semua Modul Tanpa Pertanyaan</button>
+                    <button class="btn btn-secondary" id="btn-eksplorasi-hub" style="width:100%; padding: 16px;">Eksplorasi Transformasi Geometri</button>
                 </div>
                 <div id="action-container" style="text-align: center; margin-top: auto; padding-bottom: 40px; min-height: 80px;"></div>
             </div>

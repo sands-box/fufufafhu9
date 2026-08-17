@@ -11,20 +11,22 @@ window.TL.EksplorasiHub = {
         let currentModule = 'refleksi';
 
         target.innerHTML = `
-            <div class="module-wrapper">
-                <div class="module-sidebar">
+            <div class="module-wrapper" style="position: relative; overflow: hidden;">
+                <div class="form-bg-image" style="position: absolute; inset: 0; z-index: 0;"></div>
+                <div class="form-bg-scrim" style="position: absolute; inset: 0; z-index: 1;"></div>
+                <div class="module-sidebar" style="position: relative; z-index: 2;">
                     <div class="module-sidebar-header">
                         <div class="sidebar-top-row">
                             <button class="btn-back" id="btn-back">&larr; Dashboard</button>
                         </div>
-                        <h3 class="module-title" style="color: var(--color-teal);">Eksplorasi Bebas</h3>
+                        <h3 class="module-title" style="color: var(--color-teal);">Eksplorasi Transformasi Geometri</h3>
                     </div>
                     <div class="sidebar-nav" id="hub-nav"></div>
                     <div class="sidebar-footer">
                         <button class="btn-settings-gear" id="btn-settings-gear-hub" title="Pengaturan">&#9881;</button>
                     </div>
                 </div>
-                <div class="module-content-area">
+                <div class="module-content-area" style="position: relative; z-index: 2;">
                     <div class="gabungan-layout">
                         <div class="gabungan-kiri" style="flex: 1;">
                             <div class="canvas-header">
