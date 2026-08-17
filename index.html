@@ -25,9 +25,6 @@
         if (!window.jspdf) {
             document.write('<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"><\/script>');
         }
-        // Catatan: lib/three.core.min.js yang sebelumnya di-bundle ternyata bukan
-        // build Three.js lengkap (kelas inti seperti Scene tidak tersedia di dalamnya),
-        // jadi Three.js dimuat langsung dari CDN.
         document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"><\/script>');
     </script>
 
