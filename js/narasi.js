@@ -209,6 +209,7 @@ window.TL.Narasi = {
     }
 
     wrapper.style.position = 'relative';
+    wrapper.style.top = '-13px';
     wrapper.style.zIndex = '20';
 
     wrapper.innerHTML = `
