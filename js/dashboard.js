@@ -12,32 +12,80 @@ window.TL.Dashboard = {
         ];
 
         let html = `
-            <div style="padding: 40px; width: 100%; max-width: 1000px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; position: relative;">
-                <button class="btn-settings-gear scene-gear" id="btn-gear-dash" title="Pengaturan">&#9881;</button>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(254, 243, 199, 0.1); padding-bottom: 20px;">
-                    <div>
-                        <h2 style="color: var(--color-accent-amber); font-size: 2rem;">Studio Arsitek Pola</h2>
-                        <p style="color: var(--color-warm-light); opacity: 0.8; font-size: 1.1rem; margin-top: 8px;">Selamat datang, ${state.nama} | Kelas: ${state.kelas}</p>
+            <div style="position: relative; overflow: hidden; min-height: 100vh;">
+                <div class="form-bg-image" style="position: absolute; inset: 0; z-index: 0;"></div>
+                <div class="form-bg-scrim" style="position: absolute; inset: 0; z-index: 1;"></div>
+                <div style="position: relative; z-index: 2; padding: 40px; width: 100%; max-width: 1000px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(254, 243, 199, 0.1); padding-bottom: 20px;">
+                        <div>
+                            <h2 style="color: var(--color-accent-amber); font-size: 2rem;">Studio Arsitek Pola</h2>
+                            <p id="user-info" style="color: var(--color-warm-light); opacity: 0.8; font-size: 1.1rem; margin-top: 8px;">Selamat datang, ${state.nama} | Kelas: ${state.kelas}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 0.9rem; color: var(--color-accent-blue);">Progres Magang</span>
+                            <h3 id="progress-text" style="font-size: 1.5rem; margin-top: 4px;">0/4</h3>
+                        </div>
                     </div>
-                    <div style="text-align: right;">
-                        <span style="font-size: 0.9rem; color: var(--color-accent-blue);">Progres Magang</span>
-                        <h3 id="progress-text" style="font-size: 1.5rem; margin-top: 4px;">0/4</h3>
+                    <p style="background: rgba(20,184,166,0.08); border-left: 4px solid var(--color-teal); padding: 12px 16px; border-radius: 4px; color: var(--color-warm-light); font-size: 0.9rem; margin-bottom: 28px;">
+                        Selesaikan keempat modul di bawah ini terlebih dahulu sebelum bisa mengikuti Uji Kompetensi.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 24px;" id="folder-grid"></div>
+                    <div style="margin-bottom: 40px;">
+                        <button class="btn btn-secondary" id="btn-eksplorasi-hub" style="width:100%; padding: 16px;">Eksplorasi Transformasi Geometri</button>
+                    </div>
+                    <div id="action-container" style="text-align: center; margin-top: auto; padding-bottom: 40px; min-height: 80px;"></div>
+                </div>
+                <button class="btn-settings-gear scene-gear" id="btn-gear-dash" title="Pengaturan" style="position: absolute; bottom: 20px; left: 20px; z-index: 3;">&#9881;</button>
+                <button class="btn btn-secondary" id="btn-profil" style="position: absolute; top: 20px; right: 20px; z-index: 3; padding: 8px 16px; font-size: 0.9rem;">Profil</button>
+                <div id="modal-profil" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+                    <div style="background: var(--color-navy); padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid var(--color-teal);">
+                        <h3 style="color: var(--color-accent-amber); margin-bottom: 20px;">Edit Profil</h3>
+                        <form id="form-profil">
+                            <div class="form-group">
+                                <label for="edit-nama">Nama Lengkap</label>
+                                <input type="text" id="edit-nama" class="form-control" value="${state.nama}" required minlength="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-kelas">Kelas</label>
+                                <input type="text" id="edit-kelas" class="form-control" value="${state.kelas}" required>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">Simpan</button>
+                                <button type="button" class="btn btn-secondary" id="btn-batal-profil" style="flex: 1;">Batal</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <p style="background: rgba(20,184,166,0.08); border-left: 4px solid var(--color-teal); padding: 12px 16px; border-radius: 4px; color: var(--color-warm-light); font-size: 0.9rem; margin-bottom: 28px;">
-                    Selesaikan keempat modul di bawah ini (Pemantik + Eksplorasi &amp; Temuan) terlebih dahulu sebelum bisa mengikuti Uji Kompetensi.
-                </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 24px;" id="folder-grid"></div>
-                <div style="margin-bottom: 40px;">
-                    <button class="btn btn-secondary" id="btn-eksplorasi-hub" style="width:100%; padding: 16px;">Eksplorasi Transformasi Geometri</button>
-                </div>
-                <div id="action-container" style="text-align: center; margin-top: auto; padding-bottom: 40px; min-height: 80px;"></div>
             </div>
         `;
+
         target.innerHTML = html;
 
         target.querySelector('#btn-gear-dash').addEventListener('click', () => window.TL.Settings.show());
         target.querySelector('#btn-eksplorasi-hub').addEventListener('click', () => window.TL.App.navigate('eksplorasiHub'));
+        target.querySelector('#btn-profil').addEventListener('click', () => {
+            const modal = target.querySelector('#modal-profil');
+            modal.style.display = 'flex';
+            target.querySelector('#edit-nama').value = window.TL.State.data.nama;
+            target.querySelector('#edit-kelas').value = window.TL.State.data.kelas;
+        });
+        target.querySelector('#btn-batal-profil').addEventListener('click', () => {
+            target.querySelector('#modal-profil').style.display = 'none';
+        });
+        target.querySelector('#form-profil').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nama = target.querySelector('#edit-nama').value.trim();
+            const kelas = target.querySelector('#edit-kelas').value.trim();
+            if (nama.length >= 2 && kelas.length > 0) {
+                window.TL.State.data.nama = nama;
+                window.TL.State.data.kelas = kelas;
+                window.TL.State.save();
+                target.querySelector('#user-info').innerText = `Selamat datang, ${nama} | Kelas: ${kelas}`;
+                target.querySelector('#modal-profil').style.display = 'none';
+            } else {
+                alert('Nama minimal 2 karakter dan kelas tidak boleh kosong.');
+            }
+        });
 
         const grid = target.querySelector('#folder-grid');
         modules.forEach(m => {
