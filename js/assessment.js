@@ -37,8 +37,8 @@ window.TL.Assessment = {
             <svg viewBox="0 0 240 200" style="width:100%; max-width:280px; margin: 16px auto; display:block;">
                 <line x1="20" y1="100" x2="220" y2="100" stroke="rgba(254,243,199,0.4)" stroke-width="1.5"/>
                 <line x1="120" y1="10" x2="120" y2="190" stroke="rgba(254,243,199,0.4)" stroke-width="1.5"/>
-                <text x="70" y="30" fill="rgba(254,243,199,0.5)" font-size="11">Kuadran II</text>
-                <text x="150" y="185" fill="rgba(254,243,199,0.5)" font-size="11">Kuadran IV</text>
+                <text x="70" y="30" fill="rgba(254,243,199,0.5)" font-size="11">Kuadran II  </text>
+                <text x="150" y="185" fill="rgba(254,243,199,0.5)" font-size="11">Kuadran IV  </text>
                 <circle cx="90" cy="60" r="5" fill="#38bdf8"/><text x="90" y="48" fill="#38bdf8" font-size="12" text-anchor="middle">F(-2,4)</text>
                 <circle cx="180" cy="180" r="5" fill="#f59e42"/><text x="180" y="168" fill="#f59e42" font-size="12" text-anchor="middle">F'(4,-8)</text>
                 <path d="M92 63 L177 176" stroke="#fef3c7" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>
