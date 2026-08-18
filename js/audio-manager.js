@@ -7,6 +7,8 @@ window.TL.Audio = {
     volume: 0.5,
     muted: false,
     sfxEnabled: true,
+    sfxVolume: 0.5,
+    _clickInitialized: false,
 
     _ensureEl() {
         if (!this.musicEl) {
@@ -59,25 +61,46 @@ window.TL.Audio = {
         if (this.musicEl && !this.muted) this.musicEl.volume = v;
     },
 
+    setSfxVolume(v) {
+        this.sfxVolume = v;
+    },
+
     toggleMute(isMuted) {
         this.muted = isMuted;
         if (this.musicEl) this.musicEl.volume = isMuted ? 0 : this.volume;
     },
 
-    setSfxEnabled(v) { this.sfxEnabled = v; },
+    setSfxEnabled(v) {
+        this.sfxEnabled = v;
+    },
 
     playSFX(src) {
         if (!this.sfxEnabled) return;
         const el = new Audio(src);
-        el.volume = this.muted ? 0 : this.volume;
+        el.volume = this.muted ? 0 : this.sfxVolume;
         el.play().catch(() => {});
+    },
+
+    playClick() {
+        this.playSFX('assets/audio/sfx_click.mp3');
+    },
+
+    initGlobalClickSound() {
+        if (this._clickInitialized) return;
+        this._clickInitialized = true;
+        document.addEventListener('click', (e) => {
+            const target = e.target.closest('button, .btn, [role="button"]');
+            if (!target) return;
+            if (target.disabled || target.classList.contains('disabled')) return;
+            this.playClick();
+        });
     },
 
     startTyping() {
         if (!this.sfxEnabled) return;
         if (!this.typingEl) this.typingEl = new Audio('assets/audio/typing.mp3');
         this.typingEl.loop = true;
-        this.typingEl.volume = this.muted ? 0 : this.volume * 0.5;
+        this.typingEl.volume = this.muted ? 0 : this.sfxVolume * 0.5;
         this.typingEl.currentTime = 0;
         this.typingEl.play().catch(() => {});
     },
