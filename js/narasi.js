@@ -247,7 +247,7 @@ window.TL.Narasi = {
     },
 
     renderLanding(target) {
-        window.TL.Audio.playSingleLoop('assets/audio/stream-cafe.mp3');
+        window.TL.Audio.playSingleLoop('assets/audio/nostalgic-childhood.mp3');
         const scene = this._createSceneBase(target, 'assets/images/bg-landing.webp');
 
         const scrim = document.createElement('div');
