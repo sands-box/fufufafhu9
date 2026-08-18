@@ -247,55 +247,69 @@ window.TL.Narasi = {
     },
 
     renderLanding(target) {
-        window.TL.Audio.playSingleLoop('assets/audio/nostalgic-childhood.mp3');
-        const scene = this._createSceneBase(target, 'assets/images/bg-landing.webp');
+    const startMusic = () => {
+        if (!window.TL.Audio.musicStarted) {
+            window.TL.Audio.playSingleLoop('assets/audio/nostalgic-childhood.mp3');
+            window.TL.Audio.musicStarted = true;
+            document.removeEventListener('pointerdown', startMusic);
+            document.removeEventListener('keydown', startMusic);
+            document.removeEventListener('touchstart', startMusic);
+        }
+    };
 
-        const scrim = document.createElement('div');
-        scrim.className = 'landing-scrim';
-        scene.appendChild(scrim);
+    document.addEventListener('pointerdown', startMusic);
+    document.addEventListener('keydown', startMusic);
+    document.addEventListener('touchstart', startMusic);
 
-        const content = document.createElement('div');
-        content.className = 'landing-content';
-        content.innerHTML = `
-            <svg viewBox="0 0 520 110" class="landing-curve-text" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <path id="arcTop" d="M 15 100 A 875 875 0 0 1 505 100" fill="none"/>
-                    <path id="arcBottom" d="M 55 108 A 1061 1061 0 0 1 465 108" fill="none"/>
-                </defs>
-                <text font-family="Poppins, sans-serif" font-size="19" font-weight="700" fill="var(--color-gold)" letter-spacing="2">
-                    <textPath href="#arcTop" startOffset="50%" text-anchor="middle">MEDIA PEMBELAJARAN MATEMATIKA</textPath>
-                </text>
-                <text font-family="Poppins, sans-serif" font-size="14" font-weight="500" fill="var(--color-warm-light)" letter-spacing="1.5">
-                    <textPath href="#arcBottom" startOffset="50%" text-anchor="middle">TRANSFORMASI GEOMETRI</textPath>
-                </text>
-            </svg>
-            <h1 class="landing-title">NARAGEO</h1>
-            <p class="landing-subtitle">Narasi dalam Geometri</p>
-            <div class="landing-badges">
-                <span class="landing-badge" style="border-color: var(--color-refleksi); color: var(--color-refleksi);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21" stroke-dasharray="2 2"/><path d="M4 8 L9 12 L4 16 Z"/><path d="M20 8 L15 12 L20 16 Z"/></svg>
-                    Refleksi
-                </span>
-                <span class="landing-badge" style="border-color: var(--color-translasi); color: var(--color-translasi);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="6" height="6" opacity="0.4"/><rect x="15" y="9" width="6" height="6"/><path d="M9 12 L14 12 M14 12 L11.5 9.5 M14 12 L11.5 14.5"/></svg>
-                    Translasi
-                </span>
-                <span class="landing-badge" style="border-color: var(--color-rotasi); color: var(--color-rotasi);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 3v5h-5"/></svg>
-                    Rotasi
-                </span>
-                <span class="landing-badge" style="border-color: var(--color-dilatasi); color: var(--color-dilatasi);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" opacity="0.5"/><rect x="4" y="4" width="16" height="16"/></svg>
-                    Dilatasi
-                </span>
-            </div>
-            <button class="btn btn-primary" style="font-size: 1.1rem; padding: 13px 34px;" id="btn-start">MULAI</button>
-        `;
-        scene.appendChild(content);
+    const scene = this._createSceneBase(target, 'assets/images/bg-landing.webp');
 
-        document.getElementById('btn-start').addEventListener('click', () => {
-            this._transitionTo('narasi2');
-        });
+    const scrim = document.createElement('div');
+    scrim.className = 'landing-scrim';
+    scene.appendChild(scrim);
+
+    const content = document.createElement('div');
+    content.className = 'landing-content';
+    content.innerHTML = `
+        <svg viewBox="0 0 520 110" class="landing-curve-text" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <path id="arcTop" d="M 15 100 A 875 875 0 0 1 505 100" fill="none"/>
+                <path id="arcBottom" d="M 55 108 A 1061 1061 0 0 1 465 108" fill="none"/>
+            </defs>
+            <text font-family="Poppins, sans-serif" font-size="19" font-weight="700" fill="var(--color-gold)" letter-spacing="2">
+                <textPath href="#arcTop" startOffset="50%" text-anchor="middle">MEDIA PEMBELAJARAN MATEMATIKA</textPath>
+            </text>
+            <text font-family="Poppins, sans-serif" font-size="14" font-weight="500" fill="var(--color-warm-light)" letter-spacing="1.5">
+                <textPath href="#arcBottom" startOffset="50%" text-anchor="middle">TRANSFORMASI GEOMETRI</textPath>
+            </text>
+        </svg>
+        <h1 class="landing-title">NARAGEO</h1>
+        <p class="landing-subtitle">Narasi dalam Geometri</p>
+        <div class="landing-badges">
+            <span class="landing-badge" style="border-color: var(--color-refleksi); color: var(--color-refleksi);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21" stroke-dasharray="2 2"/><path d="M4 8 L9 12 L4 16 Z"/><path d="M20 8 L15 12 L20 16 Z"/></svg>
+                Refleksi
+            </span>
+            <span class="landing-badge" style="border-color: var(--color-translasi); color: var(--color-translasi);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="6" height="6" opacity="0.4"/><rect x="15" y="9" width="6" height="6"/><path d="M9 12 L14 12 M14 12 L11.5 9.5 M14 12 L11.5 14.5"/></svg>
+                Translasi
+            </span>
+            <span class="landing-badge" style="border-color: var(--color-rotasi); color: var(--color-rotasi);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 3v5h-5"/></svg>
+                Rotasi
+            </span>
+            <span class="landing-badge" style="border-color: var(--color-dilatasi); color: var(--color-dilatasi);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" opacity="0.5"/><rect x="4" y="4" width="16" height="16"/></svg>
+                Dilatasi
+            </span>
+        </div>
+        <button class="btn btn-primary" style="font-size: 1.1rem; padding: 13px 34px;" id="btn-start">MULAI</button>
+    `;
+    scene.appendChild(content);
+
+    document.getElementById('btn-start').addEventListener('click', () => {
+        startMusic();
+        this._transitionTo('narasi2');
+    });
     },
 
     renderScene2(target) {
