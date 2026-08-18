@@ -214,7 +214,7 @@ window.TL.Narasi = {
 
         wrapper.innerHTML = `
             <div style="position:relative;">
-                <img src="assets/images/email-icon.png" class="email-notif-icon" alt="Email" style="width:110px; aspect-ratio:2342/1792; object-fit:contain;">
+                <img src="assets/images/email-icon.webp" class="email-notif-icon" alt="Email" style="width:110px; aspect-ratio:2342/1792; object-fit:contain;">
                 <div class="email-notif-badge" style="position:absolute; top:12px; right:0px;">1</div>
             </div>
             <div class="email-notif-hint" style="display:${options.disabled ? 'none' : 'block'};">Klik dan buka emailnya</div>
@@ -299,7 +299,7 @@ window.TL.Narasi = {
     },
 
     renderScene2(target) {
-        const scene = this._createSceneBase(target, 'assets/images/bg-t2-mencari-kerja.jpg', true);
+        const scene = this._createSceneBase(target, 'assets/images/bg-t2-mencari-kerja.webp', true);
         const dialogs = [
             { text: "Haduh... sudah berminggu-minggu aku mencari pekerjaan, tapi belum ada yang cocok.", avatar: "assets/images/avatar-kecewa.png" },
             { text: "Setiap hari buka laptop, scroll lowongan, kirim lamaran... tapi tidak ada balasan. Kira-kira apa yang salah ya? huuumm....", avatar: "assets/images/avatar-kecewa.png" },
@@ -311,7 +311,7 @@ window.TL.Narasi = {
     },
 
     renderScene3(target) {
-        const scene = this._createSceneBase(target, 'assets/images/bg-t3-lowongan.jpg');
+        const scene = this._createSceneBase(target, 'assets/images/bg-t3-lowongan.webp');
         const dialogs = [
             "Hmm, banyak juga lowongan yang tersedia...",
             "Arsitek Pola Kreatif? Desainer Struktur? Kedengarannya menarik!",
@@ -337,7 +337,7 @@ window.TL.Narasi = {
     },
 
     renderScene4(target) {
-        const scene = this._createSceneBase(target, 'assets/images/bg-t4-email-masuk.jpg', true);
+        const scene = this._createSceneBase(target, 'assets/images/bg-t4-email-masuk.webp', true);
 
         const emailWrapper = this._mountClickableEmail(scene, { disabled: true });
 
