@@ -73,6 +73,10 @@ window.TL.Canvas3D = {
         container.innerHTML = `
             <div id="c3d-holder" style="width:100%; height:280px; cursor:grab;"></div>
             <div class="kontrol-3d-panel">${controlsHTML}</div>
+            <div class="slider-row zoom-row" style="margin-top:12px;">
+                <div class="slider-label"><span>Zoom</span><b id="v-zoom">21.0</b></div>
+                <input type="range" id="s-zoom" min="6" max="40" step="0.5" value="25">
+            </div>
         `;
 
         const holder = container.querySelector('#c3d-holder');
@@ -204,6 +208,30 @@ window.TL.Canvas3D = {
         sBantu.addEventListener('change', update);
         update();
 
+        let cameraRadius = camera.position.length();
+        const sZoom = container.querySelector('#s-zoom');
+        const vZoom = container.querySelector('#v-zoom');
+
+        const syncZoomSlider = () => {
+            const sliderValue = 46 - cameraRadius;
+            sZoom.value = sliderValue;
+            vZoom.innerText = cameraRadius.toFixed(1);
+        };
+
+        const updateCameraPosition = () => {
+            camera.position.normalize().multiplyScalar(cameraRadius);
+            camera.lookAt(0, 0, 0);
+            syncZoomSlider();
+        };
+
+        sZoom.addEventListener('input', () => {
+            cameraRadius = 46 - parseFloat(sZoom.value);
+            vZoom.innerText = cameraRadius.toFixed(1);
+            updateCameraPosition();
+        });
+
+        syncZoomSlider();
+
         let isDragging = false, prevPos = { x: 0, y: 0 };
         renderer.domElement.addEventListener('mousedown', (e) => { isDragging = true; prevPos = { x: e.offsetX, y: e.offsetY }; });
         window.addEventListener('mouseup', () => { isDragging = false; });
@@ -214,6 +242,36 @@ window.TL.Canvas3D = {
             pivot.rotation.x += dy * 0.008;
             prevPos = { x: e.offsetX, y: e.offsetY };
         });
+
+        holder.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 1 : -1;
+            cameraRadius = Math.min(40, Math.max(6, cameraRadius + delta * 0.5));
+            updateCameraPosition();
+        }, { passive: false });
+
+        let pinchStartDistance = 0;
+        renderer.domElement.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                pinchStartDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: true });
+        renderer.domElement.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const dist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const delta = pinchStartDistance > 0 ? (dist - pinchStartDistance) / 100 : 0;
+                cameraRadius = Math.min(40, Math.max(6, cameraRadius - delta));
+                updateCameraPosition();
+                pinchStartDistance = dist;
+            }
+        }, { passive: false });
 
         const resize = () => {
             if (container.offsetParent === null) return;

@@ -319,7 +319,7 @@ window.TL.Assessment = {
             ];
             window.TL.Narasi.renderChatBubbles(sceneContainer, dialogs, () => {
                 this.showFinalActions(target, false);
-            }, "assets/images/avatar-kecewa.png", "Lanjut");
+            }, "assets/images/avatar-kecewa.webp", "Lanjut");
         }
     },
 
@@ -364,7 +364,7 @@ window.TL.Assessment = {
                 ];
                 window.TL.Narasi.renderChatBubbles(sceneContainer, dialogs, () => {
                     this._ulangiMagang();
-                }, "assets/images/avatar-kecewa.png", "Ulangi Magang");
+                }, "assets/images/avatar-kecewa.webp", "Ulangi Magang");
             });
         }
     }

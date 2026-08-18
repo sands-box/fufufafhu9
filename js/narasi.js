@@ -9,7 +9,7 @@ window.TL.Narasi = {
         narasi6: 'narasi5'
     },
 
-    renderChatBubbles(containerEl, dialogItems, onSelesai, defaultAvatar = "assets/images/avatar-netral.png", finalBtnText = "NEXT", options = {}) {
+    renderChatBubbles(containerEl, dialogItems, onSelesai, defaultAvatar = "assets/images/avatar-netral.webp", finalBtnText = "NEXT", options = {}) {
         const items = dialogItems.map(d => typeof d === 'string' ? { text: d } : d);
         let currentIndex = 0;
         let typeTimer = null;
@@ -248,7 +248,7 @@ window.TL.Narasi = {
 
     renderLanding(target) {
         window.TL.Audio.playSingleLoop('assets/audio/nostalgic-childhood.mp3');
-        const scene = this._createSceneBase(target, 'assets/images/bg-landing.jpg');
+        const scene = this._createSceneBase(target, 'assets/images/bg-landing.webp');
 
         const scrim = document.createElement('div');
         scrim.className = 'landing-scrim';
@@ -303,11 +303,11 @@ window.TL.Narasi = {
         const dialogs = [
             { text: "Haduh... sudah berminggu-minggu aku mencari pekerjaan, tapi belum ada yang cocok.", avatar: "assets/images/avatar-kecewa.png" },
             { text: "Setiap hari buka laptop, scroll lowongan, kirim lamaran... tapi tidak ada balasan. Kira-kira apa yang salah ya? huuumm....", avatar: "assets/images/avatar-kecewa.png" },
-            { text: "Tapi aku tidak boleh menyerah. Ayo coba cari lagi!", avatar: "assets/images/avatar-netral.png" }
+            { text: "Tapi aku tidak boleh menyerah. Ayo coba cari lagi!", avatar: "assets/images/avatar-netral.webp" }
         ];
         this.renderChatBubbles(scene, dialogs, () => {
             this._transitionTo('narasi3');
-        }, "assets/images/avatar-netral.png", "NEXT", { sceneName: 'narasi2', startDelay: 1400 });
+        }, "assets/images/avatar-netral.webp", "NEXT", { sceneName: 'narasi2', startDelay: 1400 });
     },
 
     renderScene3(target) {
@@ -316,11 +316,11 @@ window.TL.Narasi = {
             "Hmm, banyak juga lowongan yang tersedia...",
             "Arsitek Pola Kreatif? Desainer Struktur? Kedengarannya menarik!",
             "Aku coba apply beberapa. Semoga kali ini ada yang merespons.",
-            { text: "Selesai, aku sudah kirim semua lamaranku, semoga ada yang diterima.", blackout: true, bgSwap: "assets/images/bg-menunggu.jpg" }
+            { text: "Selesai, aku sudah kirim semua lamaranku, semoga ada yang diterima.", blackout: true, bgSwap: "assets/images/bg-menunggu.webp" }
         ];
         this.renderChatBubbles(scene, dialogs, () => {
             this._transitionTo('jedaWaktu');
-        }, "assets/images/avatar-netral.png", "NEXT", { sceneName: 'narasi3', startDelay: 1400 });
+        }, "assets/images/avatar-netral.webp", "NEXT", { sceneName: 'narasi3', startDelay: 1400 });
     },
 
     renderJedaWaktu(target) {
@@ -344,12 +344,12 @@ window.TL.Narasi = {
         const dialogs = [
             {
                 text: "Eh, ada email masuk! Jantungku berdebar nih...",
-                avatar: "assets/images/avatar-antusias.jpg",
+                avatar: "assets/images/avatar-antusias.webp",
                 sfxOnStart: "assets/audio/sfx_notif-email.mp3"
             },
             {
                 text: "Hasil Seleksi Studio Arsitek Pola... ini dari yang kemarin!",
-                avatar: "assets/images/avatar-antusias.jpg"
+                avatar: "assets/images/avatar-antusias.webp"
             },
             {
                 text: "Semoga kabar baik. Ayo kita buka!",
@@ -364,7 +364,7 @@ window.TL.Narasi = {
 
         const opts = { sceneName: 'narasi4' };
         if (this._viaTransition) opts.startDelay = 1400;
-        this.renderChatBubbles(scene, dialogs, null, "assets/images/avatar-netral.png", "NEXT", opts);
+        this.renderChatBubbles(scene, dialogs, null, "assets/images/avatar-netral.webp", "NEXT", opts);
     },
 
     renderScene5(target) {
@@ -381,13 +381,13 @@ window.TL.Narasi = {
         const dialogs = [
             "AKU DITERIMA! Ya ampun, akhirnya...!",
             "Tapi tunggu, ada syaratnya. Aku harus ikut program magang dulu.",
-            { text: "Refleksi, Translasi, Rotasi, Dilatasi... Apa itu semua?", avatar: "assets/images/avatar-netral.png" },
-            { text: "Tapi ini kesempatanku satu-satunya. Aku harus bisa!", avatar: "assets/images/avatar-netral.png" }
+            { text: "Refleksi, Translasi, Rotasi, Dilatasi... Apa itu semua?", avatar: "assets/images/avatar-netral.webp" },
+            { text: "Tapi ini kesempatanku satu-satunya. Aku harus bisa!", avatar: "assets/images/avatar-netral.webp" }
         ];
 
         this.renderChatBubbles(scene, dialogs, () => {
             this._transitionTo('narasi6');
-        }, "assets/images/avatar-senang.png", "NEXT", { sceneName: 'narasi5', startDelay: 1400 });
+        }, "assets/images/avatar-senang.webp", "NEXT", { sceneName: 'narasi5', startDelay: 1400 });
     },
 
     renderScene6(target) {
@@ -398,7 +398,7 @@ window.TL.Narasi = {
         this.renderChatBubbles(scene, dialogs, () => {
             window.TL.Audio.playSingleLoop('assets/audio/stream-cafe.mp3');
             this._transitionTo('form');
-        }, "assets/images/avatar-senang.png", "Mulai Magang", { sceneName: 'narasi6', finalBtnClass: 'btn-start-action', startDelay: 1400 });
+        }, "assets/images/avatar-senang.webp", "Mulai Magang", { sceneName: 'narasi6', finalBtnClass: 'btn-start-action', startDelay: 1400 });
     },
 
     renderTransition(target) {
@@ -410,6 +410,6 @@ window.TL.Narasi = {
         ];
         this.renderChatBubbles(scene, dialogs, () => {
             window.TL.App.navigate('assessment');
-        }, "assets/images/avatar-netral.png", "Mulai Uji");
+        }, "assets/images/avatar-netral.webp", "Mulai Uji");
     }
 };
